@@ -11,8 +11,8 @@ struct node {
         if (!this) {
             return 0;
         }
-        int leftHeight = (left) ? left->height() : 0;
-        int rightHeight = (right) ? right->height() : 0;
+        int leftHeight = left ? left->height() : 0;
+        int rightHeight = right ? right->height() : 0;
 
         return max(leftHeight, rightHeight) + 1;
     }

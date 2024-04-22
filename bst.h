@@ -30,7 +30,9 @@ class BST {
 		if (n == NULL) {
 			return tree->addRoot(num);
 		}
-		return insert_node(n, num);
+		node* inserted = insert_node(n, num);
+		balance(inserted);
+		return inserted;
 	}
 
 	node* insert_node(node* n, int num) {
@@ -53,6 +55,15 @@ class BST {
 				return insert_node(n->left, num);
 			}
 		}
+	}
+
+	void balance(node* n) {
+		if (!n) return;
+		int balanceFactor = n->left->height() - n->right->height();
+		if (balanceFactor > 1 || balanceFactor < -1) {
+			restructure(n);
+		}
+		balance(n->parent);
 	}
 
 
@@ -86,9 +97,8 @@ class BST {
 		}
 	}
 
-    // TODO copy and paste your completed restructure method here
     bool restructure(node* gp) {
-        node* par; // parent
+        node* par;
 		if (gp->left && gp->right) {
 			if (gp->left->height() > gp->right->height()) {
 				par = gp->left;
@@ -97,12 +107,10 @@ class BST {
 			}
 		} else if (!gp->left) {
 			par = gp->right;
-		} else if (!gp->right) {
+		} else {
 			par = gp->left;
 		}
-        // TODO find parent
 
-        // This is an indicator of the placement of grandparent to parent (gtop)
         bool gtop_right = false;
         if (gp->right == par) {
             gtop_right = true;
@@ -112,6 +120,12 @@ class BST {
         if (par->left && par->right) {
 	        if (par->left->height() > par->right->height()) {
 		        child = par->left;
+	        } else if (par->left->height() == par->right->height()) {
+				if (gtop_right) {
+					child = par->right;
+				} else {
+					child = par->left;
+				}
 	        } else {
 		        child = par->right;
 	        }
@@ -121,57 +135,26 @@ class BST {
 	        child = par->left;
         }
 
-        // This is an indicator of the placement of parent to child (ptoc)
         bool ptoc_right = false;
         if (par->right == child) {
             ptoc_right = true;
         }
 
-        // FOR THE FOLLOWING: Write in each of the if statements a console output
-        // on its corresponding operation (ZIGLEFT, ZIGRIGHT, ZIGZAGLEFT, or ZIGZAGRIGHT)
-
-        // z
-        //  \
-        //   y
-        //    \
-        //     x
         if (gtop_right && ptoc_right) {
         	cout << "ZIGLEFT" << endl;
             zigleft(par);
-        }
-
-        // z
-        //   \
-        //     y
-        //    /
-        //   x
-        else if (gtop_right && !ptoc_right) {
+        } else if (gtop_right && !ptoc_right) {
         	cout << "ZIGZAGLEFT" << endl;
             zigright(child);
         	zigleft(child);
-        }
-
-        //     z
-        //    /
-        //   y
-        //  /
-        // x
-        else if (!gtop_right && !ptoc_right) {
+        } else if (!gtop_right && !ptoc_right) {
         	cout << "ZIGRIGHT" << endl;
             zigright(par);
-        }
-
-        //      z
-        //    /
-        //  y
-        //   \
-        //    x
-        else {
+        } else {
         	cout << "ZIGZAGRIGHT" << endl;
             zigleft(child);
         	zigright(child);
         }
-
         return true;
     }
 

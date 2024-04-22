@@ -26,18 +26,18 @@ int main() {
             case 'p':
                 tree->print();
                 break;
-            case 'L':
-                cin >> num;
-                tree->zigleft(nodes[num]);
-            break;
+            // case 'L':
+            //     cin >> num;
+            //     tree->zigleft(nodes[num]);
+            // break;
             // case 'R':
             //     cin >> num;
             // tree->zigright(nodes[num]);
             // break;
-            case 'R':
-                cin >> num;
-                tree->restructure(nodes[num]);
-            break;
+            // case 'R':
+            //     cin >> num;
+            //     tree->restructure(nodes[num]);
+            // break;
 /**
  // Uncomment this for Unit Testing 1
 
